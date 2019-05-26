@@ -1,6 +1,7 @@
 from papirus import PapirusTextPos
 from html.parser import HTMLParser
 from io import StringIO
+import atexit
 import os.path
 import pickle
 import datetime
@@ -25,6 +26,9 @@ def main():
     #pp.pprint(sun_data)
     
     text = PapirusTextPos(autoUpdate=False)
+
+    atexit.register(exit_message_hook, text)
+
     # TODO: monochrome icons for sunrise/sunset; other values? requires using PapirusComposite instead of PapirusTextPos.
     text.AddText("Rise:", 0, 0, Id="sunrise")
     text.AddText("Set:", 0, 20, Id="sunset")
@@ -170,6 +174,12 @@ class PreExtractor(HTMLParser):
             self.pre_data = data
         elif data.rstrip():
             print("Warn: found multiple non-empty <pre> sections")
+
+def exit_message_hook(text):
+    text.Clear()
+    text.AddText("Exiting {}".format(datetime.datetime.now()))
+    # The screen has just been cleared; a partial update seems reasonable.
+    text.WriteAll(True)
 
 if __name__ == "__main__":
     main()
