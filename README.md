@@ -6,6 +6,8 @@ outside.
 Uses a [PiPiRus e-ink display](https://github.com/PiSupply/PaPiRus#papirus) for
 the Raspberry Pi Zero (W) and Python 3.
 
+![Demonstration photo](img/sun_times.jpg)
+
 ## Current features
 
 * Sunrise and sunset
@@ -28,7 +30,7 @@ the Raspberry Pi Zero (W) and Python 3.
 
 pipenv, configuration file, fpm package
 
-Download sun data
-    https://aa.usno.navy.mil/data/docs/RS_OneYear.php
-    https://aa.usno.navy.mil/cgi-bin/aa_rstablew.pl?ID=AA&year=2019&task=0&state=MI&place=Ann+Arbor
-Account for DST
+* Download sun data
+  * https://aa.usno.navy.mil/data/docs/RS_OneYear.php
+  * https://aa.usno.navy.mil/cgi-bin/aa_rstablew.pl?ID=AA&year=2019&task=0&state=MI&place=Ann+Arbor
+* Account for DST
