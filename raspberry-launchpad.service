@@ -1,5 +1,5 @@
 [Unit]
-Description=A utility providing information and functions helpful as you prepare to go outside.
+Description=Raspberry Launchpad e-ink information display
 After=network-online.target
 Wants=network-online.target
 
