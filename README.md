@@ -30,7 +30,11 @@ the Raspberry Pi Zero (W) and Python 3.
 
 pipenv, configuration file, fpm package, use pytz
 
-* Download sun data
+* Download sun data if not already present
   * https://aa.usno.navy.mil/data/docs/RS_OneYear.php
   * https://aa.usno.navy.mil/cgi-bin/aa_rstablew.pl?ID=AA&year=2019&task=0&state=MI&place=Ann+Arbor
-* Account for DST
+* Accomodate locations like Barrow, Alaska that have
+
+    (**** object continuously above horizon)                                                      (---- object continuously below horizon)
+
+  entries
