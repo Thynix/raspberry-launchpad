@@ -1,0 +1,12 @@
+[Unit]
+Description=A utility providing information and functions helpful as you prepare to go outside.
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/bin/python3 -m launchpad
+WorkingDirectory=/home/pi/raspberry-launchpad
+# TODO: create raspberry-launchpad-user, run as it.
+
+[Install]
+WantedBy=multi-user.target
