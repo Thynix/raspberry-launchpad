@@ -30,9 +30,10 @@ def main():
 
     atexit.register(exit_message_hook, text)
 
-    # TODO: monochrome icons for sunrise/sunset; other values? requires using PapirusComposite instead of PapirusTextPos.
-    text.AddText("Rise:", 0, 0, Id="sunrise")
-    text.AddText("Set:", 0, 20, Id="sunset")
+    # TODO: Bitmap support requires using PapirusComposite instead of
+    # PapirusTextPos.
+    text.AddText("\u2600rise:", 0, 0, Id="sunrise")
+    text.AddText("\u2600set:", 0, 20, Id="sunset")
     text.AddText("Today is", 0, 42, size=17, Id="date")
     text.AddText("Starting up...", 0, 60, Id="startup")
     text.AddText("up", 0, 78, size=17, Id="uptime")
@@ -64,8 +65,8 @@ def main():
             sunset_time = sunset_time.replace(hour=sunset_time.hour + 1)
 
         text.RemoveText("startup")
-        text.UpdateText("sunrise", "Rise: {}".format(sunrise_time.strftime("%I:%M %p")))
-        text.UpdateText("sunset", "Set: {}".format(sunset_time.strftime("%I:%M %p")))
+        text.UpdateText("sunrise", "\u2600rise: {}".format(sunrise_time.strftime("%I:%M %p")))
+        text.UpdateText("sunset", "\u2600set: {}".format(sunset_time.strftime("%I:%M %p")))
         text.UpdateText("date", "Today is {}".format(today.strftime("%A, %Y-%m-%d")))
         # For testing the longest English day name.
         #text.UpdateText("date", "Today is {}".format(today.strftime("Wednesday, %Y-%m-%d")))
