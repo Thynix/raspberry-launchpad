@@ -45,9 +45,23 @@ def main():
         if sun_data is None or today not in sun_data:
             sun_data = load_sun_data(year, state, city)
         
+        # This all assumes the sun data is specified in a non-DST variant of
+        # the local timezone.
         today_data = sun_data[today]
         sunrise_time = today_data["sunrise"]
         sunset_time = today_data["sunset"]
+
+        # Add one hour for daylight savings time.
+        #
+        # From the struct_time documentation:
+        # > tm_isdst may be set to 1 when daylight savings time is in effect, and 0 when it is not.
+        # TODO: If only refreshing at midnight and DST toggles after that, the
+        #       display will be wrong until the next day.
+        is_dst = time.localtime().tm_isdst == 1
+        if is_dst:
+            sunrise_time = sunrise_time.replace(hour=sunrise_time.hour + 1)
+            sunset_time = sunset_time.replace(hour=sunset_time.hour + 1)
+
         text.RemoveText("startup")
         text.UpdateText("sunrise", "Rise: {}".format(sunrise_time.strftime("%I:%M %p")))
         text.UpdateText("sunset", "Set: {}".format(sunset_time.strftime("%I:%M %p")))

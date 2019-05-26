@@ -28,7 +28,7 @@ the Raspberry Pi Zero (W) and Python 3.
 
 ## TODO
 
-pipenv, configuration file, fpm package
+pipenv, configuration file, fpm package, use pytz
 
 * Download sun data
   * https://aa.usno.navy.mil/data/docs/RS_OneYear.php
