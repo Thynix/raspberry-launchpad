@@ -57,8 +57,6 @@ def main():
         #
         # From the struct_time documentation:
         # > tm_isdst may be set to 1 when daylight savings time is in effect, and 0 when it is not.
-        # TODO: If only refreshing at midnight and DST toggles after that, the
-        #       display will be wrong until the next day.
         is_dst = time.localtime().tm_isdst == 1
         if is_dst:
             sunrise_time = sunrise_time.replace(hour=sunrise_time.hour + 1)
@@ -81,12 +79,12 @@ def main():
         text.WriteAll(first_display)
         first_display = False
 
-        # Wait until midnight of the next day.
+        # Wait until the next hour.
         now = datetime.datetime.now()
-        midnight_tomorrow = now + datetime.timedelta(days=1) - datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=now.second)
-        seconds_until_midnight = (midnight_tomorrow - now).total_seconds()
-        print("tomorrow is {}; waiting {} seconds until midnight".format(midnight_tomorrow, seconds_until_midnight))
-        time.sleep(seconds_until_midnight)
+        next_hour = (now + datetime.timedelta(hours=1)).replace(microsecond=0, second=0, minute=0)
+        wait_seconds = (next_hour - now).total_seconds()
+        print("waiting {} seconds until next hour".format(wait_seconds))
+        time.sleep(wait_seconds)
         # TODO: wait for button press?
 
 def load_sun_data(year, state, city):
