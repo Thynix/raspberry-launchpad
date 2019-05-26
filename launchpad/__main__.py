@@ -1,6 +1,7 @@
 from papirus import PapirusTextPos
 from html.parser import HTMLParser
 from io import StringIO
+import subprocess
 import atexit
 import os.path
 import pickle
@@ -32,9 +33,9 @@ def main():
     # TODO: monochrome icons for sunrise/sunset; other values? requires using PapirusComposite instead of PapirusTextPos.
     text.AddText("Rise:", 0, 0, Id="sunrise")
     text.AddText("Set:", 0, 20, Id="sunset")
-    text.AddText("Today is", 0, 40, Id="date")
+    text.AddText("Today is", 0, 42, size=17, Id="date")
     text.AddText("Starting up...", 0, 60, Id="startup")
-    #text.AddText("Up since {now.year}-{now.month}-{now.day} {now.hour}:{now.minute}".format(now=datetime.datetime.now()), 0, 60, Id="uptime")
+    text.AddText("up", 0, 78, size=17, Id="uptime")
     text.WriteAll()
 
     sun_data = None
@@ -66,6 +67,14 @@ def main():
         text.UpdateText("sunrise", "Rise: {}".format(sunrise_time.strftime("%I:%M %p")))
         text.UpdateText("sunset", "Set: {}".format(sunset_time.strftime("%I:%M %p")))
         text.UpdateText("date", "Today is {}".format(today.strftime("%A, %Y-%m-%d")))
+        # For testing the longest English day name.
+        #text.UpdateText("date", "Today is {}".format(today.strftime("Wednesday, %Y-%m-%d")))
+
+        try:
+            uptime_process = subprocess.run(["uptime", "--pretty"], stdout=subprocess.PIPE)
+            text.UpdateText("uptime", uptime_process.stdout.decode("utf8"))
+        except subprocess.CalledProcessError as e:
+            text.UpdateText("uptime", "uptime error {}".format(e.returncode))
 
         # Do a partial update on startup, and a full update each midnight.
         text.WriteAll(first_display)
