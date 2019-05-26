@@ -26,7 +26,8 @@ def main():
     #pp = pprint.PrettyPrinter(indent=4)
     #pp.pprint(sun_data)
     
-    text = PapirusTextPos(autoUpdate=False)
+    rotation = 180
+    text = PapirusTextPos(autoUpdate=False, rotation=rotation)
 
     atexit.register(exit_message_hook, text)
 
