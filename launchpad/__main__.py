@@ -24,14 +24,16 @@ def main():
 
     # TODO: Bitmap support requires using PapirusComposite instead of
     #       PapirusTextPos.
-    text.AddText("\u2600rise:", 0, 0, Id="sunrise_label")
-    text.AddText("\u2600set:", 0, 20, Id="sunset_label")
-    text.AddText("", 80, 0, Id="sunrise")
-    text.AddText("", 80, 20, Id="sunset")
-    text.AddText("Today is", 0, 42, size=17, Id="date")
-    text.AddText("Starting up...", 0, 60, Id="startup")
-    text.AddText("up", 0, 78, size=17, Id="uptime")
+    text.AddText("Today is", 0, 0, size=19, Id="date")
+    text.AddText("Startup...", 93, 20, size=19, Id="startup")
+    text.AddText("\u2600rise:", 0, 37, size=22, Id="sunrise_label")
+    text.AddText("\u2600set:", 0, 57, size=22, Id="sunset_label")
+    text.AddText("", 86, 37, size=22, Id="sunrise")
+    text.AddText("", 86, 57, size=22, Id="sunset")
+    text.AddText("up", 0, 80, size=14, Id="uptime")
     text.WriteAll()
+
+    text.RemoveText("startup")
 
     sun_data = None
     first_display = True
@@ -56,10 +58,9 @@ def main():
             sunrise_time = sunrise_time.replace(hour=sunrise_time.hour + 1)
             sunset_time = sunset_time.replace(hour=sunset_time.hour + 1)
 
-        text.RemoveText("startup")
+        text.UpdateText("date", "Today is {}".format(today.strftime("%A, %Y-%m-%d")))
         text.UpdateText("sunrise", sunrise_time.strftime("%I:%M %p"))
         text.UpdateText("sunset", sunset_time.strftime("%I:%M %p"))
-        text.UpdateText("date", "Today is {}".format(today.strftime("%A, %Y-%m-%d")))
         # For testing the longest English day name.
         #text.UpdateText("date", "Today is {}".format(today.strftime("Wednesday, %Y-%m-%d")))
 
