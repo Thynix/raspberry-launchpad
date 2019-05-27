@@ -175,7 +175,7 @@ def parse_time(time_in):
 
 class PreExtractor(HTMLParser):
 
-    def __init__(self, *, convert_charrefs=True):
+    def __init__(self, convert_charrefs=True):
         super().__init__(convert_charrefs=convert_charrefs)
         self.is_pre = False
         self.pre_data = None
@@ -200,10 +200,18 @@ class PreExtractor(HTMLParser):
 
 def exit_message_hook(text):
     text.Clear()
-    text.AddText("Exiting {}".format(datetime.datetime.now()))
     # The screen has just been cleared; a partial update seems reasonable.
     text.WriteAll(True)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        text.papirus.clear()
+        text.AddText("Error; exited: {} {}".format(
+            e,
+            datetime.datetime.now().strftime("Y%-%m-%d %I:%M %p"),
+        ))
+        text.papirus.update()
+        raise e
