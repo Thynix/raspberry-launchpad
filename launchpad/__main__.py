@@ -7,32 +7,26 @@ import os.path
 import pickle
 import datetime
 import time
-import math
+
 
 def main():
     # TODO: load config from somewhere - config.py? Path from environment variable?
     # TODO: concept of ... pages? tabs? that are loaded in and registered.
-    # TODO: instead of trying to use the tiny buttons on the papirus, is there like a row of 5 keyboard keys? maybe nice cherry switches. like Burke (or Matt?) had that one time, except functional.
+    # TODO: instead of trying to use the tiny buttons on the papirus, is there
+    #       like a row of 5 keyboard keys? maybe nice cherry switches.
 
     # TODO: make data directory, state, place configurable.
     # TODO: break into sunrise/sunset launchpad page module
-    # TODO: How to schedule to re-fetch on year change? maybe a timer? fetch if less than a week to avoid lots of work at midnight?
     state = "MI"
     city = "Ann Arbor"
 
-    # Now this is end of else and common regardless of how acquired.
-    # TODO: Where to document dict format? Times keyed "sunrise" and "sunset" keyed by Date
-    #import pprint
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(sun_data)
-    
     rotation = 180
     text = PapirusTextPos(autoUpdate=False, rotation=rotation)
 
     atexit.register(exit_message_hook, text)
 
     # TODO: Bitmap support requires using PapirusComposite instead of
-    # PapirusTextPos.
+    #       PapirusTextPos.
     text.AddText("\u2600rise:", 0, 0, Id="sunrise")
     text.AddText("\u2600set:", 0, 20, Id="sunset")
     text.AddText("Today is", 0, 42, size=17, Id="date")
@@ -88,6 +82,7 @@ def main():
         time.sleep(wait_seconds)
         # TODO: wait for button press?
 
+
 def load_sun_data(year, state, city):
     sun_data_dir = "/home/pi/raspberry-launchpad/sun-data/"
     base_filename = "{year} {state} {city}".format(year=year, state=state, city=city)
@@ -106,6 +101,7 @@ def load_sun_data(year, state, city):
 
     print("loaded")
     return sun_data
+
 
 def download_sun_data(year, state, city, raw_path):
     # TODO: download instead of taking raw_path
@@ -126,10 +122,6 @@ def download_sun_data(year, state, city, raw_path):
     trimmed_pre = ""
     for line in pre_lines:
         trimmed_pre += line.split(maxsplit=1)[1]
-
-    #print(trimmed_pre)
-    # TODO: stop before loading pandas
-    #exit(0)
 
     # This import takes a long time - (over 10 seconds on this Raspberry Pi
     # Zero W) - so only do it when necessary.
@@ -180,10 +172,13 @@ def parse_time(time_in):
     time_int = int(time_in)
     return datetime.time(time_int // 100, time_int % 100)
 
+
 class PreExtractor(HTMLParser):
-    # TODO: move to instance instead of class
-    is_pre = False
-    pre_data = None
+
+    def __init__(self, *, convert_charrefs=True):
+        super().__init__(convert_charrefs=convert_charrefs)
+        self.is_pre = False
+        self.pre_data = None
 
     def handle_starttag(self, tag, attrs):
         self.is_pre = (tag == "pre")
@@ -198,11 +193,17 @@ class PreExtractor(HTMLParser):
         elif data.rstrip():
             print("Warn: found multiple non-empty <pre> sections")
 
+    def error(self, message):
+        print("Parsing error: {}".format(message))
+        exit(1)
+
+
 def exit_message_hook(text):
     text.Clear()
     text.AddText("Exiting {}".format(datetime.datetime.now()))
     # The screen has just been cleared; a partial update seems reasonable.
     text.WriteAll(True)
+
 
 if __name__ == "__main__":
     main()
