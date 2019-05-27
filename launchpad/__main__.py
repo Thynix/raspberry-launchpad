@@ -2,7 +2,6 @@ from papirus import PapirusTextPos
 from html.parser import HTMLParser
 from io import StringIO
 import subprocess
-import atexit
 import os.path
 import pickle
 import datetime
@@ -22,8 +21,6 @@ def main():
 
     rotation = 180
     text = PapirusTextPos(autoUpdate=False, rotation=rotation)
-
-    atexit.register(exit_message_hook, text)
 
     # TODO: Bitmap support requires using PapirusComposite instead of
     #       PapirusTextPos.
@@ -198,20 +195,17 @@ class PreExtractor(HTMLParser):
         exit(1)
 
 
-def exit_message_hook(text):
-    text.Clear()
-    # The screen has just been cleared; a partial update seems reasonable.
-    text.WriteAll(True)
-
-
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        text.papirus.clear()
-        text.AddText("Error; exited: {} {}".format(
+        # Display abnormal errors, but not SystemExit or KeyboardInterrupt.
+        # TODO: how to get config from here?
+        text = PapirusTextPos(autoUpdate=False, rotation=180)
+        text.AddText("Error {} {}: {}".format(
+            datetime.datetime.now().strftime("%Y-%m-%d %I:%M %p"),
+            type(e).__name__,
             e,
-            datetime.datetime.now().strftime("Y%-%m-%d %I:%M %p"),
         ))
-        text.papirus.update()
-        raise e
+        text.WriteAll(partialUpdate=True)
+        raise

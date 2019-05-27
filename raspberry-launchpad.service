@@ -3,8 +3,6 @@ Description=Raspberry Launchpad e-ink information display
 
 [Service]
 ExecStart=/usr/bin/python3 -m launchpad
-# Allow the atexit handler to run. SIGTERM, used by default, does not.
-KillSignal=SIGINT
 WorkingDirectory=/home/pi/raspberry-launchpad
 # TODO: create raspberry-launchpad-user, run as it.
 
