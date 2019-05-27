@@ -26,10 +26,10 @@ def main():
     #       PapirusTextPos.
     text.AddText("Today is", 0, 0, size=17, Id="date")
     text.AddText("Startup...", 93, 20, size=19, Id="startup")
-    text.AddText("\u2600rise:", 0, 37, size=22, Id="sunrise_label")
-    text.AddText("\u2600set:", 0, 57, size=22, Id="sunset_label")
-    text.AddText("", 86, 37, size=22, Id="sunrise")
-    text.AddText("", 86, 57, size=22, Id="sunset")
+    text.AddText("\u2600rise:", 0, 35, size=23, Id="sunrise_label")
+    text.AddText("\u2600set:", 0, 57, size=23, Id="sunset_label")
+    text.AddText("", 87, 35, size=23, Id="sunrise")
+    text.AddText("", 87, 57, size=23, Id="sunset")
     text.AddText("up", 0, 80, size=14, Id="uptime")
     text.WriteAll()
 
