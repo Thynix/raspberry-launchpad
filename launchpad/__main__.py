@@ -70,7 +70,7 @@ def main():
         except subprocess.CalledProcessError as e:
             text.UpdateText("uptime", "uptime error {}".format(e.returncode))
 
-        # Do a partial update on startup, and a full update each midnight.
+        # Do a partial update on startup, and a full update each following hour.
         text.WriteAll(first_display)
         first_display = False
 
