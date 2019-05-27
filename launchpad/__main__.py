@@ -24,7 +24,7 @@ def main():
 
     # TODO: Bitmap support requires using PapirusComposite instead of
     #       PapirusTextPos.
-    text.AddText("Today is", 0, 0, size=19, Id="date")
+    text.AddText("Today is", 0, 0, size=17, Id="date")
     text.AddText("Startup...", 93, 20, size=19, Id="startup")
     text.AddText("\u2600rise:", 0, 37, size=22, Id="sunrise_label")
     text.AddText("\u2600set:", 0, 57, size=22, Id="sunset_label")
