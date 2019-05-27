@@ -26,6 +26,13 @@ the Raspberry Pi Zero (W) and Python 3.
 
     apt install python3 python3-pandas
 
+## Attribution
+
+* [no wifi by Gregor Cresnar from the Noun Project](https://thenounproject.com/term/no-wifi/488903/)
+* [settings error by icon 54 from the Noun Project](https://thenounproject.com/term/settings-error/230271) (lines)
+* [settings error by icon 54 from the Noun Project](https://thenounproject.com/term/settings-error/237416) (solid)
+* [Arrow by Free Icons from the Noun Project](https://thenounproject.com/term/arrow/2540002)
+
 ## TODO
 
 pipenv, configuration file, fpm package, use pytz
