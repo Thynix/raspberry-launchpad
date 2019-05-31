@@ -140,15 +140,16 @@ def download_sun_data(year, state, city, raw_path):
     sun_dict = sun_fwf.to_dict()
     sun_data = dict()
     for column_number in range(0, 24, 2):
-        for day_number in range(31):
+        for row_number in range(31):
             # If a day doesn't exist in a month, it is specified as NaN. Assert
             # that the pair relationship between columns holds.
-            if np.isnan(sun_dict[column_number][day_number]):
-                assert np.isnan(sun_dict[column_number + 1][day_number])
+            if np.isnan(sun_dict[column_number][row_number]):
+                assert np.isnan(sun_dict[column_number + 1][row_number])
                 continue
 
-            assert not np.isnan(sun_dict[column_number + 1][day_number])
+            assert not np.isnan(sun_dict[column_number + 1][row_number])
 
+            day_number = row_number + 1
             month_number = (column_number + 2) // 2
             try:
                 sun_date = datetime.date(year, month_number, day_number)
@@ -161,8 +162,8 @@ def download_sun_data(year, state, city, raw_path):
                 continue
 
             sun_data[sun_date] = {
-                "sunrise": parse_time(sun_dict[column_number][day_number]),
-                "sunset": parse_time(sun_dict[column_number + 1][day_number]),
+                "sunrise": parse_time(sun_dict[column_number][row_number]),
+                "sunset": parse_time(sun_dict[column_number + 1][row_number]),
             }
 
     return sun_data
