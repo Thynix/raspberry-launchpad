@@ -1,11 +1,12 @@
 from papirus import PapirusTextPos
 from html.parser import HTMLParser
 from io import StringIO
-import subprocess
 import os.path
 import pickle
 import datetime
 import time
+import requests
+import defusedxml.ElementTree
 
 
 def main():
@@ -30,7 +31,7 @@ def main():
     text.AddText("\u2600set:", 0, 57, size=23, Id="sunset_label")
     text.AddText("", 87, 35, size=23, Id="sunrise")
     text.AddText("", 87, 57, size=23, Id="sunset")
-    text.AddText("up", 0, 80, size=14, Id="uptime")
+    text.AddText("Temp", 0, 80, size=14, Id="temp")
     text.WriteAll()
 
     text.RemoveText("startup")
@@ -64,11 +65,7 @@ def main():
         # For testing the longest English day name.
         #text.UpdateText("date", "Today is {}".format(today.strftime("Wednesday, %Y-%m-%d")))
 
-        try:
-            uptime_process = subprocess.run(["uptime", "--pretty"], stdout=subprocess.PIPE)
-            text.UpdateText("uptime", uptime_process.stdout.decode("utf8"))
-        except subprocess.CalledProcessError as e:
-            text.UpdateText("uptime", "uptime error {}".format(e.returncode))
+        text.UpdateText("temp", "Temp {}".format(get_temperature_forecast()))
 
         # Do a partial update on startup, and a full update each following hour.
         text.WriteAll(first_display)
@@ -81,6 +78,38 @@ def main():
         print("waiting {} seconds until next hour".format(wait_seconds))
         time.sleep(wait_seconds)
         # TODO: wait for button press?
+
+
+def get_temperature_forecast():
+    # TODO: Parameterize lat/long in config
+    try:
+        r = requests.get("https://forecast.weather.gov/MapClick.php",
+                         params={
+                             "lat": "42.2171",
+                             "lon": "-83.7391",
+                             "unit": "0",
+                             "lg": "english",
+                             "FcstType": "dwml",
+                         })
+        if r.status_code != 200:
+            print("failed to fetch forecast: {}".format(r.reason))
+            return "?/?"
+
+        root = defusedxml.ElementTree.fromstring(r.text)
+        forecast = root.find("./data[@type='forecast']/parameters[@applicable-location='point1']")
+        # TODO: What unit codes are valid? Maybe use Units attribute from
+        #       temperature element.
+        return "{} F/{} F".format(
+            todays_forecast(forecast, "minimum"),
+            todays_forecast(forecast, "maximum"),
+        )
+    except requests.exceptions.RequestException as e:
+        print("failed to fetch forecast: {}".format(e))
+        return "!/!"
+
+
+def todays_forecast(forecast, temp_type):
+    return forecast.find("./temperature[@type='{}']/value".format(temp_type)).text
 
 
 def load_sun_data(year, state, city):

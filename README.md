@@ -11,11 +11,11 @@ the Raspberry Pi Zero (W) and Python 3.
 ## Current features
 
 * Sunrise and sunset
+* High and low temperatures
 
 ## Planned
 
 * Precipitation
-* High and low temperatures
 * Measuring pet food/water bowl weights over time
 
 ## Requirements
@@ -24,7 +24,7 @@ the Raspberry Pi Zero (W) and Python 3.
 * [PaPiRus libraries installed](https://github.com/PiSupply/PaPiRus#setup-papirus)
 * Dependency packages:
 
-    apt install python3 python3-pandas
+    apt install python3 python3-pandas python3-defusedxml python3-requests
 
 ## Attribution
 
