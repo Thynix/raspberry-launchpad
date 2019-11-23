@@ -97,8 +97,9 @@ def get_temperature_forecast():
 
         root = defusedxml.ElementTree.fromstring(r.text)
         forecast = root.find("./data[@type='forecast']/parameters[@applicable-location='point1']")
-        return "{}/{}".format(
+        return "{}/{}/{}".format(
             todays_forecast(forecast, "minimum"),
+            current_temperature(root),
             todays_forecast(forecast, "maximum"),
         )
     except requests.exceptions.RequestException as e:
@@ -107,8 +108,18 @@ def get_temperature_forecast():
 
 
 def todays_forecast(forecast, temp_type):
-    temp = forecast.find("./temperature[@type='{}']".format(temp_type))
+    return format_temp(forecast.find(
+        "./temperature[@type='{}']".format(temp_type)
+    ))
 
+
+def current_temperature(root):
+    current = root.find("./data[@type='current observations']"
+                        "/parameters[@applicable-location='point1']")
+    return format_temp(current.find("./temperature[@type='apparent']"))
+
+
+def format_temp(temp):
     # Use first letter of unit as abbreviation.
     unit = temp.get("units")[0]
     value = temp.find("./value").text
