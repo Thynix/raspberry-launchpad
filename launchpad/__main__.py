@@ -97,9 +97,7 @@ def get_temperature_forecast():
 
         root = defusedxml.ElementTree.fromstring(r.text)
         forecast = root.find("./data[@type='forecast']/parameters[@applicable-location='point1']")
-        # TODO: What unit codes are valid? Maybe use Units attribute from
-        #       temperature element.
-        return "{} F/{} F".format(
+        return "{}/{}".format(
             todays_forecast(forecast, "minimum"),
             todays_forecast(forecast, "maximum"),
         )
@@ -109,7 +107,12 @@ def get_temperature_forecast():
 
 
 def todays_forecast(forecast, temp_type):
-    return forecast.find("./temperature[@type='{}']/value".format(temp_type)).text
+    temp = forecast.find("./temperature[@type='{}']".format(temp_type))
+
+    # Use first letter of unit as abbreviation.
+    unit = temp.get("units")[0]
+    value = temp.find("./value").text
+    return "{} {}".format(value, unit)
 
 
 def load_sun_data(year, state, city):
