@@ -81,7 +81,7 @@ def get_temperature_forecast(latitude, longitude):
                          })
         if r.status_code != 200:
             print("failed to fetch forecast: {}".format(r.reason))
-            return "?/?"
+            return "?/?/?"
 
         root = defusedxml.ElementTree.fromstring(r.text)
         forecast = root.find("./data[@type='forecast']/parameters[@applicable-location='point1']")
@@ -92,7 +92,10 @@ def get_temperature_forecast(latitude, longitude):
         )
     except requests.exceptions.RequestException as e:
         print("failed to fetch forecast: {}".format(e))
-        return "!/!"
+        return "!/!/!"
+    except defusedxml.ElementTree.ParseError as e:
+        print("failed to parse forecast: {}".format(e))
+        return "!/?/!"
 
 
 def todays_forecast(forecast, temp_type):
