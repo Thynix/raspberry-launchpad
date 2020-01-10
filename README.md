@@ -24,7 +24,8 @@ the Raspberry Pi Zero (W) and Python 3.
 * [PaPiRus libraries installed](https://github.com/PiSupply/PaPiRus#setup-papirus)
 * Dependency packages:
 
-    apt install python3 python3-pandas python3-defusedxml python3-requests
+    apt install python3 python3-defusedxml python3-requests
+    pip install dateutil skyfield
 
 ## Attribution
 
@@ -35,13 +36,6 @@ the Raspberry Pi Zero (W) and Python 3.
 
 ## TODO
 
-pipenv, configuration file, fpm package, use pytz
+pipenv, configuration file, fpm package
 
-* Download sun data if not already present
-  * https://aa.usno.navy.mil/data/docs/RS_OneYear.php
-  * https://aa.usno.navy.mil/cgi-bin/aa_rstablew.pl?ID=AA&year=2019&task=0&state=MI&place=Ann+Arbor
-* Accomodate locations like Barrow, Alaska that have
-
-    (**** object continuously above horizon)                                                      (---- object continuously below horizon)
-
-  entries
+* Accommodate locations like Barrow, Alaska
