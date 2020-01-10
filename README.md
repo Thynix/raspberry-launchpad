@@ -24,8 +24,8 @@ the Raspberry Pi Zero (W) and Python 3.
 * [PaPiRus libraries installed](https://github.com/PiSupply/PaPiRus#setup-papirus)
 * Dependency packages:
 
-    apt install python3 python3-defusedxml python3-requests
-    pip install dateutil skyfield
+    apt install python3 python3-defusedxml python3-requests python3-dateutil
+    pip install skyfield
 
 ## Attribution
 
